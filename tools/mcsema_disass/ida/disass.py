@@ -36,7 +36,7 @@ def execute(args, command_args):
   ida_dir = os.path.dirname(ida_disass_path)
   ida_get_cfg_path = os.path.join(ida_dir, "get_cfg.py")
 
-  env = {}
+  env = os.environ
   env["IDALOG"] = os.devnull
   env["TVHEADLESS"] = "1"
   env["HOME"] = os.path.expanduser('~')
