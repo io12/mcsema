@@ -41,7 +41,7 @@ def execute(args, command_args):
   env["TVHEADLESS"] = "1"
   env["HOME"] = os.path.expanduser('~')
   env["IDA_PATH"] = os.path.dirname(args.disassembler)
-  env["PYTHONPATH"] = os.path.dirname(ida_dir)
+  env["PYTHONPATH"] = ":".join(sys.path + [os.path.dirname(ida_dir)])
   if "SystemRoot" in os.environ:
     env["SystemRoot"] = os.environ["SystemRoot"]
 
