@@ -61,7 +61,7 @@ def execute(args, command_args):
 
   cmd = []
   cmd.append(quote(args.disassembler))  # Path to IDA.
-  cmd.append("-B")  # Batch mode.
+  #cmd.append("-B")  # Batch mode.
   cmd.append("-S\"{}\"".format(" ".join(script_cmd)))
   cmd.append(quote(args.binary))
 
