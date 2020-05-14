@@ -41,7 +41,7 @@ _MISSING_FLOWS = collections.defaultdict(set)
 # Mark an address as being the beginning of a function.
 def try_mark_as_function(address):
   global _FUNC_HEAD_EAS, _BLOCK_HEAD_EAS
-  
+
   _FUNC_HEAD_EAS.add(address)
   _BLOCK_HEAD_EAS.add(address)
 
@@ -141,7 +141,7 @@ def get_static_successors(sub_ea, inst, binary_is_pie):
     if table:
       for target_ea in table.entries.values():
         target_eas.add(target_ea)
-    
+
     # Opportunistically add more flows to this instruction if it seems like
     # there are any blocks in the function with no predecessors.
     if not len(target_eas) and sub_ea in _MISSING_FLOWS:
@@ -164,7 +164,7 @@ _BAD_BLOCK = (tuple(), set())
 def analyse_block(func_ea, ea, binary_is_pie=False):
   """Find the instructions of a basic block."""
   global _BLOCK_HEAD_EAS, _TERMINATOR_EAS, _FUNC_HEAD_EAS
-  
+
   if not is_code(ea):
     DEBUG("ERROR: Block at {:x} in function {:x} is not code".format(ea, func_ea))
     return _BAD_BLOCK
@@ -195,7 +195,7 @@ def analyse_block(func_ea, ea, binary_is_pie=False):
     _TERMINATOR_EAS.add(inst_eas[-1])
     successors = get_static_successors(func_ea, insts[-1], binary_is_pie)
     successors = [succ for succ in successors if is_code(succ)]
-  
+
   return (inst_eas, set(successors))
 
 def find_default_block_heads(sub_ea):
@@ -243,7 +243,7 @@ def find_default_block_heads(sub_ea):
     ea = sub_ea
     while min_ea <= ea < max_ea and ea != idc.BADADDR:
       if ea not in _BLOCK_HEAD_EAS \
-      and 16 < idaapi.get_alignment(ea) \
+      and 16 < idaapi.alignment(ea) \
       and read_byte(ea) not in _ALIGNMENT_BYTES \
       and not has_flow_to_code(ea):
         if is_data_reference(ea):
@@ -313,7 +313,7 @@ def analyse_subroutine(sub_ea, binary_is_pie):
       DEBUG("  Block at {:x} has no terminator!".format(block_head_ea))
       found_block_eas.remove(block_head_ea)
       continue
-    
+
     elif term_inst.ea != sub_ea and term_inst.ea in _FUNC_HEAD_EAS:
       found_block_eas.remove(block_head_ea)
       continue
